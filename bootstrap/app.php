@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->api(prepend:[
+            'authMiddleware'=>\App\Http\Middleware\HeaderMiddleware::class, 
+        ]);
+
+   
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
