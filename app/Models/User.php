@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,6 +47,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function foto(): Attribute
+    {
+        return Attribute::make(
+            get: function ($image) {
+                // Periksa apakah $image sudah berupa URL lengkap
+                return filter_var($image, FILTER_VALIDATE_URL) ? $image : url('/images/users/' . $image);
+            },
+        );
     }
 
 

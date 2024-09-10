@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->date('tanggal_lahir');
+            $table->date('tanggal_lahir')->format('d/m/Y');
 
             $table->bigInteger('kota_asal')->unsigned();
             $table->foreign('kota_asal')->references('id')->on('kotas')->onDelete('cascade');

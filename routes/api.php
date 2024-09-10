@@ -21,7 +21,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/manajemen-user')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/',[ManajemenUserController::class, 'index']);
         Route::get('/detail/{id}',[ManajemenUserController::class, 'detailUser']);
-        Route::post('/tambah-user',[ManajemenUserController::class, 'tambahUser']);
+        Route::post('/tambah',[ManajemenUserController::class, 'tambahUser']);
         Route::get('/edit/{id}',[ManajemenUserController::class, 'editUser']);
         Route::post('/update/{id}',[ManajemenUserController::class, 'updateUser']);
         Route::delete('/hapus/{id}',[ManajemenUserController::class, 'hapusUser']);
