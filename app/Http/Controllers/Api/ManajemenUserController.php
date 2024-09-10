@@ -118,14 +118,21 @@ class ManajemenUserController extends Controller
 
         $user = User::find($id);
 
+        // dd($user);
+
         $request->validate([
             'name' => 'required',
             'foto' => 'nullable|file|image|mimes:jpeg,png,jpg',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:8',
             'tanggal_lahir' => 'required|date',
             'kota_asal' => 'required',
         ]);
+
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => 'min:8',
+            ]);
+        }
 
         if ($request->hasFile('foto')) {
             $image = $request->file('foto');
@@ -135,17 +142,28 @@ class ManajemenUserController extends Controller
 
             $image->move(public_path('images/users'), $image_name);
 
+            if ($request->password) {
+                $user->update([
+                    'password' => Hash::make($request->password),
+                ]);
+            }
+
             $user->update([
                 'name' => $request->name,
                 'foto' => $image_name,
-                'password' => Hash::make($request->password),
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'kota_asal' => $request->kota_asal,
             ]);
         } else {
+
+            if ($request->password) {
+                $user->update([
+                    'password' => Hash::make($request->password),
+                ]);
+            }
+
             $user->update([
                 'name' => $request->name,
-                'password' => Hash::make($request->password),
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'kota_asal' => $request->kota_asal,
             ]);
@@ -158,6 +176,7 @@ class ManajemenUserController extends Controller
             'email' => $user->email,
             'tanggal_lahir' => $user->tanggal_lahir,
             'kota_asal' => $user->kota->kota,
+            'password' => $request->password,
         ];
 
 
@@ -166,8 +185,15 @@ class ManajemenUserController extends Controller
 
     public function hapusUser($id)
     {
-        dd(User::find($id));
-        User::where($id,'id')->delete();
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User Tidak Ditemukan'], 404);
+        }
+
+        $user->delete();
+
+
         return response()->json(['message' => 'Berhasil Menghapus User'], 200);
     }
 }

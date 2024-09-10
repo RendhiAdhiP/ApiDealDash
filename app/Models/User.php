@@ -53,7 +53,6 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function ($image) {
-                // Periksa apakah $image sudah berupa URL lengkap
                 return filter_var($image, FILTER_VALIDATE_URL) ? $image : url('/images/users/' . $image);
             },
         );

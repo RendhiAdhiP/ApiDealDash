@@ -55,14 +55,14 @@ class ManajemenKotaController extends Controller
     public function hapusKota($id)
     {
 
-            $kota = Kota::find($id);
+        $kota = Kota::find($id);
 
-            if (!$kota) {
-                return response()->json(['message' => 'Kota Tidak Ditemukan'], 404);
-            }
+        if (!$kota) {
+            return response()->json(['message' => 'Kota Tidak Ditemukan'], 404);
+        }
 
-            $kota->delete();
-            return response()->json(['message' => 'Berhasil Menghapus Kota'], 200);
+        $kota->delete();
+        return response()->json(['message' => 'Berhasil Menghapus Kota'], 200);
   
     }
 }
