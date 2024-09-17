@@ -2,50 +2,61 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helppers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
-
-        // dd($user);
 
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        $user = $request->only('email', 'password');
+        try {
+            $user = $request->only('email', 'password');
 
+            if (Auth::attempt($user)) {
 
-        if (Auth::attempt($user)) {
+                $token = $request->user()->createToken('token')->plainTextToken;
 
-            $token = $request->user()->createToken('token')->plainTextToken;
-
-            return response()->json([
-                'message' => 'Selamat Datang ' . $request->user()->name,
-                'user' => [
+                $data = [
                     'name' => $request->user()->name,
                     'foto' => $request->user()->foto,
                     'email' => $request->user()->email,
                     'token' => $token
-                ],
-            ], 201);
-        }
+                ];
 
-        return response()->json(['message' => 'Invalid email or password'], 400);
+                return ApiResponse::success('Selamat Datang ' . $request->user()->name, $data, 201);
+            }
+
+            return ApiResponse::error('Invalid email or password', 400);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return ApiResponse::error('Internal Server Error: ' . $e->getMessage(), 500);
+        }
     }
 
     public function logout(Request $request)
     {
 
-        $request->user()->tokens()->delete();
+        try {
 
-        return response()->json(['message' => 'Berhasil Logout'], 200);
+            $request->user()->tokens()->delete();
+
+            return ApiResponse::success('Berhasil Logout', [], 200);
+            
+        } catch (\Exception $e) {
+
+            Log::error($e);
+            
+            return ApiResponse::error('Internal Server Error: ' . $e->getMessage(), 500);
+        }
     }
 }

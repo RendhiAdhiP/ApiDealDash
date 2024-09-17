@@ -2,17 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helppers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Kota;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ManajemenKotaController extends Controller
 {
 
     public function index()
     {
-        $kota = Kota::all();
-        return response()->json(['kota' => $kota], 200);
+        try {
+            $data = Kota::all();
+
+            return ApiResponse::success('', $data, 200);
+        } catch (\Exception $e) {
+
+            Log::error($e);
+            return ApiResponse::error('Internal Server Error: ' . $e->getMessage(), 500);
+        }
     }
 
     public function tambahKota(Request $request)
@@ -22,47 +31,82 @@ class ManajemenKotaController extends Controller
             'kota' => 'required|unique:kotas,kota',
         ]);
 
-        $kota = Kota::create([
-            'kota' => $request->kota
-        ]);
+        try {
 
-        return response()->json(['message' => 'Berhasil Menambahkan Kota',], 201);
+            Kota::create([
+                'kota' => $request->kota
+            ]);
+
+            return ApiResponse::success('Berhasil Menambahkan Kota', [], 201);
+        } catch (\Exception $e) {
+
+            Log::error($e);
+            return ApiResponse::error('Internal Server Error: ' . $e->getMessage(), 500);
+        }
     }
 
     public function editKota($id)
     {
 
-        $kota = Kota::find($id);
+        try {
+            $data = Kota::find($id);
 
-        return response()->json(['kota' => $kota], 200);
+            if (!$data) {
+                return ApiResponse::error('Kota Tidak Ditemukan', 404);
+            }
+
+            return ApiResponse::success('', $data, 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return ApiResponse::error('Internal Server Error: ' . $e->getMessage(), 500);
+        }
     }
 
 
     public function updateKota(Request $request, $id)
     {
+
         $request->validate([
-            'kota' => 'required',
+           'kota' => 'required|unique:kotas,kota,' . $id,
         ]);
 
-        $kota = Kota::find($id);
-        $kota->kota = $request->kota;
-        $kota->save();
+        try {
 
-        return response()->json(['message' => 'Berhasil Menghapus Kota'], 201);
+            $data = Kota::find($id);
+
+            if (!$data) {
+                return ApiResponse::error('Kota Tidak Ditemukan', 404);
+            }
+
+            $data->update([
+                'kota' => $request->kota
+            ]);
+
+            return ApiResponse::success('Berhasil Mengedit Kota', [], 201);
+
+        } catch (\Exception $e) {
+
+            Log::error($e);
+            return ApiResponse::error('Internal Server Error: ' . $e->getMessage(), 500);
+        }
     }
 
 
     public function hapusKota($id)
     {
 
-        $kota = Kota::find($id);
+        try {
+            $data = Kota::find($id);
 
-        if (!$kota) {
-            return response()->json(['message' => 'Kota Tidak Ditemukan'], 404);
+            if (!$data) {
+                return response()->json(['message' => 'data Tidak Ditemukan'], 404);
+            }
+
+            $data->delete();
+            return ApiResponse::success('Berhasil Menghapus Kota', [], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return ApiResponse::error('Internal Server Error: ' . $e->getMessage(), 500);
         }
-
-        $kota->delete();
-        return response()->json(['message' => 'Berhasil Menghapus Kota'], 200);
-  
     }
 }
