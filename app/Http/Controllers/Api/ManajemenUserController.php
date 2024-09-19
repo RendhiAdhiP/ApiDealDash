@@ -18,16 +18,16 @@ class ManajemenUserController extends Controller
         try {
             $Alluser = User::with('kota')->paginate(10);
 
-            // $data = $Alluser->map(function ($u) {
-            //     return [
-            //         'id' => $u->id,
-            //         'nama' => $u->name,
-            //         'email' => $u->email,
-            //         'asal_kota' => $u->kota->kota,
-            //     ];
-            // });
+            $data = $Alluser->map(function ($u) {
+                return [
+                    'id' => $u->id,
+                    'nama' => $u->name,
+                    'email' => $u->email,
+                    'asal_kota' => $u->kota->kota,
+                ];
+            });
 
-            return ApiResponse::success('', $Alluser, 200);
+            return ApiResponse::success('', $data, 200);
         } catch (\Exception $e) {
 
             Log::error($e);
