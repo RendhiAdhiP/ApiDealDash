@@ -16,8 +16,10 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            // KotaTableSeeder::class,
+            KotaTableSeeder::class,
             UserTableSeeder::class,
+            ProdukSeeder::class,
+            // HistoryProdukSeeder::class
         ]);
     }
 }

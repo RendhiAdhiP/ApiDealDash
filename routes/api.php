@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ManajemenKotaController;
+use App\Http\Controllers\Api\ManajemenProduk;
 use App\Http\Controllers\Api\ManajemenUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,21 @@ Route::prefix('/v1')->group(function () {
         Route::get('/edit/{id}',[ManajemenKotaController::class, 'editKota']);
         Route::post('/update/{id}',[ManajemenKotaController::class, 'updateKota']);
         Route::delete('/hapus/{id}',[ManajemenKotaController::class, 'hapusKota']);
+    });
+
+    Route::prefix('/manajemen-produk')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('/',[ManajemenProduk::class, 'index']);
+        Route::post('/tambah-produk',[ManajemenProduk::class, 'tambahProduk']);
+        Route::get('/edit/{id}',[ManajemenProduk::class, 'editProduk']);
+        Route::post('/update/{id}',[ManajemenProduk::class, 'updateProduk']);
+        Route::delete('/hapus/{id}',[ManajemenProduk::class, 'hapusProduk']);
+
+        Route::get('/history',[ManajemenProduk::class, 'historyProduks']);
+        Route::post('/tambah-stok',[ManajemenProduk::class, 'tambahStok']);
+        // Route::post('/tambah',[ManajemenKotaController::class, 'tambahKota']);
+        // Route::get('/edit/{id}',[ManajemenKotaController::class, 'editKota']);
+        // Route::post('/update/{id}',[ManajemenKotaController::class, 'updateKota']);
+        // Route::delete('/hapus/{id}',[ManajemenKotaController::class, 'hapusKota']);
     });
     
 });
