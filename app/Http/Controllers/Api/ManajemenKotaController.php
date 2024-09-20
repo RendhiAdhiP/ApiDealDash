@@ -17,6 +17,7 @@ class ManajemenKotaController extends Controller
             $data = Kota::all();
 
             return ApiResponse::success('', $data, 200);
+
         } catch (\Exception $e) {
 
             Log::error($e);
@@ -38,6 +39,7 @@ class ManajemenKotaController extends Controller
             ]);
 
             return ApiResponse::success('Berhasil Menambahkan Kota', [], 201);
+
         } catch (\Exception $e) {
 
             Log::error($e);

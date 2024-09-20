@@ -16,14 +16,17 @@ class ManajemenUserController extends Controller
     {
 
         try {
-            $Alluser = User::with('kota')->paginate(10);
+            $users = User::with('kota')->paginate(10);
 
-            $data = $Alluser->map(function ($u) {
+            $data = $users->toArray();
+
+           
+            $data['data'] = collect($data['data'])->map(function ($u) {
                 return [
-                    'id' => $u->id,
-                    'nama' => $u->name,
-                    'email' => $u->email,
-                    'asal_kota' => $u->kota->kota,
+                    'id' => $u['id'],
+                    'nama' => $u['name'],
+                    'email' => $u['email'],
+                    'asal_kota' => $u['kota']['kota'],
                 ];
             });
 
