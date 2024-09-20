@@ -48,6 +48,7 @@ class ManajemenUserController extends Controller
             'password' => 'required|min:8',
             'tanggal_lahir' => 'required|date',
             'kota_asal' => 'required',
+            'role_id' => 'required',
         ]);
 
         try {
@@ -65,6 +66,7 @@ class ManajemenUserController extends Controller
                 'password' => Hash::make($request->password),
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'kota_asal' => $request->kota_asal,
+                'role_id' => $request->role_id,
 
             ]);
 
@@ -75,6 +77,7 @@ class ManajemenUserController extends Controller
                 'email' => $user->email,
                 'tanggal_lahir' => $user->tanggal_lahir,
                 'kota_asal' => $user->kota->kota,
+                'role_id' => $user->role->name,
             ];
 
             return ApiResponse::success('Berhasil Menambahkan User', $data, 201);
@@ -89,7 +92,7 @@ class ManajemenUserController extends Controller
     {
 
         try {
-            $user = User::find($id);
+            $user = User::where('id',$id)->first();
 
             if (!$user) {
                 return ApiResponse::error('User Tidak Ditemukan', 404);
@@ -102,6 +105,7 @@ class ManajemenUserController extends Controller
                 'email' => $user->email,
                 'tanggal_lahir' => $user->tanggal_lahir,
                 'kota_asal' => $user->kota->kota,
+                'role' => $user->role->name,
             ];
 
             return ApiResponse::success('', $data, 200);
@@ -130,6 +134,7 @@ class ManajemenUserController extends Controller
                 'email' => $user->email,
                 'tanggal_lahir' => $user->tanggal_lahir,
                 'kota_asal' => $user->kota,
+                'role' => $user->role,
             ];
 
             return ApiResponse::success('', $data, 200);
@@ -148,10 +153,11 @@ class ManajemenUserController extends Controller
             'email' => 'required|email|unique:users,email,' . $id,
             'tanggal_lahir' => 'required|date',
             'kota_asal' => 'required',
+            'role_id' => 'required',
         ]);
 
         try {
-            $user = User::find($id);
+            $user = User::where('id',$id)->first();
 
             if (!$user) {
                 return ApiResponse::error('User Tidak Ditemukan', 404);
@@ -182,6 +188,7 @@ class ManajemenUserController extends Controller
                     'foto' => $image_name,
                     'tanggal_lahir' => $request->tanggal_lahir,
                     'kota_asal' => $request->kota_asal,
+                    'role_id' => $request->role_id,
                 ]);
             } else {
 
@@ -195,6 +202,7 @@ class ManajemenUserController extends Controller
                     'name' => $request->name,
                     'tanggal_lahir' => $request->tanggal_lahir,
                     'kota_asal' => $request->kota_asal,
+                    'role_id' => $request->role_id,
                 ]);
             }
 
@@ -206,6 +214,7 @@ class ManajemenUserController extends Controller
                 'tanggal_lahir' => $user->tanggal_lahir,
                 'kota_asal' => $user->kota->kota,
                 'password' => $request->password,
+                'role_id' => $request->role_id,
             ];
 
 

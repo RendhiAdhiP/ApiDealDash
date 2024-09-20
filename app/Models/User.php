@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Kota::class, 'kota_asal', 'id');
     }
+
+
+    public function role(){
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
 }

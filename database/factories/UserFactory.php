@@ -31,6 +31,8 @@ class UserFactory extends Factory
         $faker = FakerFactory::create('id_ID'); 
 
         $kota_ids = Kota::pluck('id')->toArray();
+        $role_ids = \App\Models\Role::whereIn('id', [2, 3, 4])->pluck('id')->toArray();
+
 
         return [
             'name' => $faker->name,
@@ -40,6 +42,7 @@ class UserFactory extends Factory
             'password' => Hash::make('password'), 
             'tanggal_lahir' => $faker->date(),
             'kota_asal' => $faker->randomElement($kota_ids), 
+            'role_id' => $faker->randomElement($role_ids), 
             'remember_token' => $faker->sha256,
             'created_at' => now(),
             'updated_at' => now(),

@@ -17,10 +17,24 @@ class UserTableSeeder extends Seeder
     public function run(): void
     {
 
-        $faker = FakerFactory::create('id_ID');
 
-        $kota_ids = Kota::pluck('id')->toArray();
-        User::factory(10)->create();
+
+        User::factory(70)->create();
+
+        User::create([
+            'name' => "Zakaria Ramadhan",
+            'foto' => null, 
+            'email' => 'zakaria@me.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'), 
+            'tanggal_lahir' => '2000-01-01',
+            'kota_asal' => 2, 
+            'role_id' => 1, 
+            'remember_token' => 'zakaria',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
 
     }
 }

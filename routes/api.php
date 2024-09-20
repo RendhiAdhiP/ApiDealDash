@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ManajemenKotaController;
 use App\Http\Controllers\Api\ManajemenProduk;
 use App\Http\Controllers\Api\ManajemenUserController;
+use App\Http\Controllers\Api\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,10 +46,10 @@ Route::prefix('/v1')->group(function () {
 
         Route::get('/history',[ManajemenProduk::class, 'historyProduks']);
         Route::post('/tambah-stok',[ManajemenProduk::class, 'tambahStok']);
-        // Route::post('/tambah',[ManajemenKotaController::class, 'tambahKota']);
-        // Route::get('/edit/{id}',[ManajemenKotaController::class, 'editKota']);
-        // Route::post('/update/{id}',[ManajemenKotaController::class, 'updateKota']);
-        // Route::delete('/hapus/{id}',[ManajemenKotaController::class, 'hapusKota']);
+    });
+
+    Route::prefix('/role')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('/',[RoleController::class, 'index']);
     });
     
 });
