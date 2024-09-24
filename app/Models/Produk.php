@@ -18,6 +18,10 @@ class Produk extends Model
         return $this->hasMany(StokProduk::class, 'produk_id', 'produk_id');
     }
 
+    public function laporanPenjualan(){
+        return $this->hasMany(LaporanPenjualan::class, 'produk_id', 'id');
+    }
+
     protected function foto(): Attribute
     {
         return Attribute::make(

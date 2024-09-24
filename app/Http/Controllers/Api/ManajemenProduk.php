@@ -29,9 +29,9 @@ class ManajemenProduk extends Controller
                 return [
                     'produk_id' => $p->produk_id,
                     'nama' => $p->nama_produk,
+                    'stok' => $p->stok,
                     'foto' => $p->foto,
-                    // 'stok'=> $p->stok,
-                    // 'tanggal' => Carbon::parse($p->created_at)->format('d-m-Y'),
+                    'harga' => $p->harga,
                 ];
             });
 
@@ -49,6 +49,7 @@ class ManajemenProduk extends Controller
         $request->validate([
             'produk_id' => 'required|unique:produks,produk_id',
             'nama_produk' => 'required',
+            'harga' => 'required',
         ]);
 
         if ($request->foto) {
@@ -70,14 +71,9 @@ class ManajemenProduk extends Controller
                 'produk_id' => $request->produk_id,
                 'nama_produk' => $request->nama_produk,
                 'foto' => $image_name ?? 'https://cdn-icons-png.flaticon.com/512/3081/3021994.png',
+                'harga' => $request->harga,
             ]);
 
-            // HistoryProduk::create([
-            //     'produk_id' => $data->id,
-            //     'penambahan_stok' => $request->stok,
-            //     'stok_awal' => 0, 
-            //     'stok_akhir' => $request->stok,
-            // ]);
 
             return ApiResponse::success('Berhasil Menambahkan Produk', $data, 201);
         } catch (\Exception $e) {
@@ -99,6 +95,7 @@ class ManajemenProduk extends Controller
                 'produk_id' => $produk->produk_id,
                 'nama' => $produk->nama_produk,
                 'foto' => $produk->foto,
+                'harga' => $produk->harga,
             ];
 
 
@@ -154,8 +151,6 @@ class ManajemenProduk extends Controller
     {
 
         try {
-
-            // $produk = Produk::();
             
             $produk = Produk::where('produk_id', $produkId)->first();
 
@@ -212,20 +207,17 @@ class ManajemenProduk extends Controller
 
             $produk = Produk::where('produk_id', $request->produk_id)->first();
 
-
-
             $stokProduk = StokProduk::where('produk_id', $request->produk_id)->with('produk')->first();
 
             if ($stokProduk) {
-
                 
-                $stokAwal = $stokProduk->stok;
+                $stokAwal = $produk->stok;
+
                 $stokAkhir = $stokAwal + $request->stok;
-
-                $stokProduk->stok = $stokAkhir;
-                $stokProduk->update_stok += $request->stok;
-                $stokProduk->save();
-
+                
+                $produk->stok += $request->stok;
+                $produk->save();
+                
 
                 StokProduk::create([
                     'produk_id' => $produk->produk_id,
@@ -233,16 +225,21 @@ class ManajemenProduk extends Controller
                     'update_stok' => (int) $request->stok,
                     'stok_awal' => $stokAwal,
                 ]);
+
+
+
             } else {
                 
-                $stokAwal = 0; 
-                $stokAkhir = $request->stok; 
+                $produk->update([
+                    'stok'=> $request->stok
+                ]);
 
-                $stokProduk = StokProduk::create([
+
+                StokProduk::create([
                     'produk_id' => $produk->produk_id,
-                    'stok' => $stokAkhir,
                     'update_stok' => $request->stok,
-                    'stok_awal' => $stokAwal,
+                    'stok_awal' => 0,
+                    'stok' => 0 + $request->stok
                 ]);
             }
 

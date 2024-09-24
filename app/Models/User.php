@@ -49,6 +49,22 @@ class User extends Authenticatable
         ];
     }
 
+    public function isSuperadmin(){
+        return $this->role_id == 1;
+    }
+
+    public function isAdminCreate(){
+        return $this->role_id == 2;
+    }
+
+    public function isAdminView(){
+        return $this->role_id == 3;
+    }
+
+    public function isSales(){
+        return $this->role_id == 4;
+    }
+
     protected function foto(): Attribute
     {
         return Attribute::make(
@@ -68,4 +84,12 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsTo(Role::class, 'role_id', 'id');
     }
+
+
+    public function laporanPenjualan(){
+        return $this->hasMany(LaporanPenjualan::class, 'sales_id', 'id');
+    }
+
+
+    
 }

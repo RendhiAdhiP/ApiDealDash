@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ManajemenUserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
         try {
@@ -20,7 +20,6 @@ class ManajemenUserController extends Controller
 
             $data = $users->toArray();
 
-           
             $data['data'] = collect($data['data'])->map(function ($u) {
                 return [
                     'id' => $u['id'],

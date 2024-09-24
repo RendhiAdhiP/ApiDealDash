@@ -16,6 +16,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'authMiddleware'=>\App\Http\Middleware\HeaderMiddleware::class, 
         ]);
 
+        $middleware->alias([
+            'type.admin' => \App\Http\Middleware\AllAdminMiddlwware::class,
+            'type.superadmin' => \App\Http\Middleware\SuperadminMiddlewaare::class,
+            'type.adminCreate' => \App\Http\Middleware\AdminCreateMiddleware::class,
+            'type.adminView' => \App\Http\Middleware\AdminViewMiddleware::class,
+            'type.sales' => \App\Http\Middleware\SalesMiddlwware::class,
+        ]);
    
 
     })
