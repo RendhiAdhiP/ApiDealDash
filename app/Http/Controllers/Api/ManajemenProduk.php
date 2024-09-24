@@ -22,8 +22,7 @@ class ManajemenProduk extends Controller
 
         try {
 
-            $produk = Produk::all();
-            // $produk = Produk::orderBy('created_at')->get();
+            $produk = Produk::latest('created_at')->get();
 
             $data = $produk->map(function ($p) {
                 return [

@@ -11,12 +11,12 @@ class LaporanPenjualan extends Model
 
     protected $guarded = ['id'];
 
-    public function user()
+    public function sales()
     {
         return $this->belongsTo(User::class, 'sales_id', 'id');
     }
 
     public function produk(){
-        return $this->belongsTo(Produk::class, 'produk_id', 'id');
+        return $this->belongsTo(Produk::class, 'produk_id', 'produk_id');
     }
 }

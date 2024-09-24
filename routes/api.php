@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AuthSalesController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ManajemenKotaController;
 use App\Http\Controllers\Api\ManajemenProduk;
 use App\Http\Controllers\Api\ManajemenUserController;
@@ -68,6 +69,9 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/sales/penjualan')->middleware(['auth:sanctum','type.sales'])->group(function () {
         Route::get('/',[PenjualanController::class, 'index']);
+        Route::post('/tambah',[PenjualanController::class, 'tambahPenjualan']);
     });
     
+    Route::get('/laporan-penjualan',[PenjualanController::class, 'laporanPenjualan']);
+    Route::get('/',[DashboardController::class, 'index']);
 });
