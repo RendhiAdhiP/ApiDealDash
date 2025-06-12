@@ -3,7 +3,7 @@
 Repository: [https://github.com/RendhiAdhiP/ApiDealDash](https://github.com/RendhiAdhiP/ApiDealDash)
 
 ## 📌 Teknologi
-- Laravel 10
+- Laravel 11
 - MySQL / PostgreSQL
 - Laravel Storage
 - Sanctum (opsional)
